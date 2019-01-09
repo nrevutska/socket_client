@@ -14,14 +14,23 @@ public class Client {
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
             BufferedReader keyboardReader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Type message");
+            new Thread(() -> {
+                while (true) {
+                    String line = null;
+                    try {
+                        line = inputStream.readUTF();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(line);
+                    System.out.println();
+                }
+            }).start();
             String line;
             while (true) {
                 line = keyboardReader.readLine();
                 outputStream.writeUTF(line);
                 outputStream.flush();
-                line = inputStream.readUTF();
-                System.out.println(line);
-                System.out.println();
             }
         } catch (IOException x) {
             x.printStackTrace();
